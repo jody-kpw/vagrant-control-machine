@@ -1,0 +1,50 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+Vagrant.configure("2") do |config|
+  # CentOS 7 only, comment out the below line if others os.
+  # config.vm.box = "centos/7"
+
+  # Ubuntu 16.06 only, comment out the below line if others os.
+  config.vm.box = "centos/7"
+
+  config.vm.define "cm" do |cm|
+    cm.vm.hostname = "cm"
+    cm.vm.network "private_network", ip: "172.23.62.92"
+
+	cm.vm.provider "virtualbox" do |cmv|
+      cmv.memory = 4096
+    end
+
+    # Disable default /vagrant synced folder
+    cm.vm.synced_folder ".", "/vagrant", disabled: true
+
+    # custom synced folder and set permissions
+    cm.vm.synced_folder "/path/to/vagrant-control-machine/provision", "/provision",
+        owner: "root",
+        group: "root",
+        mount_options: ["dmode=755,fmode=644"]
+
+    cm.vm.synced_folder "/path/to/vagrant-control-machine/ansible", "/ansible",
+        owner: "root",
+        group: "root",
+        mount_options: ["dmode=755,fmode=644"]
+
+    cm.vm.synced_folder "/path/to/vagrant-control-machine/shared", "/shared",
+        owner: "root",
+        group: "root",
+        mount_options: ["dmode=755,fmode=644"]
+
+    # ubuntu/xenial64 only, comment out the below line if others os.
+    # cm.vm.provision :shell, :path => "vagrant/provision-cm-debian.sh"
+
+    # centos/7 only, comment out the below line if others os.
+    cm.vm.provision :shell, :path => "provision-cm-redhat.sh"
+
+  end
+
+end
