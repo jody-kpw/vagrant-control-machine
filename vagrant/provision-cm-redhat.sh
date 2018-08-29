@@ -4,7 +4,7 @@ yum update -y
 yum upgrade -y
 
 # Install python-pip and any required packages
-yum -y install python-pip
+sudo yum -y install python-pip
 
 # Install GIT
 sudo yum install -y git
